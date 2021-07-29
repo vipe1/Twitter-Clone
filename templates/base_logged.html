@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content_cols %}
+        <div class="col-content">
+            <div class="col-left">
+                <div class="sidebar">
+                    <div class="sidebar-brand">
+                        <i class="bi bi-twitter"></i>
+                        <span class="sidebar-brand-text">
+                            Twitter <span style="font-size: 10px">clone</span>
+                        </span>
+                    </div>
+                    <a href="{% url  'tweet_list' %}" class="sidebar-item">
+                        <i class="sidebar-item-icon bi bi-house-fill"></i>
+                        <span class="sidebar-item-text">Home</span>
+                    </a>
+                    <a href="{% url 'bookmark_list' %}" class="sidebar-item">
+                        <i class="sidebar-item-icon bi bi-bookmark-fill"></i>
+                        <span class="sidebar-item-text">Bookmarks</span>
+                    </a>
+                    <a href="{% url 'account_edit' %}" class="sidebar-item">
+                        <i class="sidebar-item-icon bi bi-person-circle"></i>
+                        <span class="sidebar-item-text">Account</span>
+                    </a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'admin:index' %}" class="sidebar-item">
+                            <i class="sidebar-item-icon bi bi-shield-lock-fill"></i>
+                            <span class="sidebar-item-text">Admin</span>
+                        </a>
+                    {% endif %}
+                    <div class="sidebar-divider"></div>
+                    <a href="{% url 'logout' %}" class="sidebar-item sidebar-logout" title="{{ user.display_name }}">
+                        <i class="sidebar-item-icon bi bi-door-open-fill"></i>
+                        <span class="sidebar-item-text sidebar-logout-text" style="display: block">Logged in as<br>{{ user.display_name }}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-mid">
+                {% block content %}
+                {% endblock content %}
+            </div>
+            <div class="col-right">
+                {% if tweet_create_form %}
+                     <div class="tweet-create" style="width: 300px">
+                        <form action="{% url 'tweet_create' %}" enctype="multipart/form-data" method="post">
+                            {% csrf_token %}
+                            {{ tweet_create_form.content }}
+                            <span>Image: </span>{{ tweet_create_form.image }}<br>
+                            <button type="submit" class="btn btn-success btn-sm mt-2">Tweet</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content_cols %}

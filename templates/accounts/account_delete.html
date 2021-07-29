@@ -1,0 +1,12 @@
+{% extends 'base_logged.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="login-container">
+        <h1 class="login-header">Delete account</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input class="btn btn-outline-danger btn-lg" style="margin-bottom: 10px" type="submit" value="I'm sure I want to delete my account"><br>
+        </form>
+    </div>
+{% endblock content %}

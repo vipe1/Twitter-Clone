@@ -1,0 +1,146 @@
+{% extends 'base_logged.html' %}
+{% block content %}
+    {% if tweet_list|length > 0 %}
+        {% for tweet in tweet_list %}
+            <div class="tweet-wrapper">
+                <div class="card text-white bg-dark" style="width: 500px">
+                    <div class="card-header">
+                        <a href="{% url 'account_detail' tweet.author.id %}" style="color: gold">
+                            <span style="float:left">{{ tweet.author }}</span>
+                        </a>
+                        <div class="btn-group" style="float: right">
+                          <button class="tweet-edit-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-lg-end">
+                              <form action="{% url 'tweet_bookmark' tweet.id %}" method="post" class="bookmark-form" id="tweet-bookmark-{{tweet.id}}">
+                                  {% csrf_token %}
+                                  <li><a class="dropdown-item" id="tweet-bookmark-submit-{{tweet.id}}" href="javascript:$('#tweet-bookmark-{{tweet.id}}').submit()">
+                                      {% if tweet.id not in bookmarks %}
+                                        Save
+                                      {% else %}
+                                        Unsave
+                                      {% endif %}
+                                  </a></li>
+                              </form>
+                              {% if tweet.author == user %}
+                              <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" href="{% url 'tweet_edit' tweet.id %}">Edit</a></li>
+                              <li><a class="dropdown-item" href="{% url 'tweet_delete' tweet.id %}">Delete</a></li>
+                              {% endif %}
+                          </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{ tweet.content }}
+                        </div>
+                    </div>
+                    {% if tweet.image %}
+                        <img src="{{ tweet.image.url }}">
+                    {% endif %}
+                    <div class="card-footer text-muted">
+                        <div class="tweet-buttons">
+                            <form action="{% url 'tweet_like' tweet.id %}" method="post" class="like-form" id="tweet-like-{{tweet.id}}">
+                                {% csrf_token %}
+                                {% if tweet.id in likes %}
+                                    <button class="btn btn-danger btn-sm tweet-btn like-btn-{{tweet.id}}">
+                                        <i class="bi bi-heart-fill like-icon-{{tweet.id}}"></i>
+                                        <span class="like-count like-count-{{tweet.id}}">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-outline-danger btn-sm tweet-btn like-btn-{{tweet.id}}">
+                                        <i class="bi bi-heart like-icon-{{tweet.id}}"></i>
+                                        <span class="like-count like-count-{{tweet.id}}">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                                    </button>
+                                {% endif %}
+                            </form>
+                            <button class="btn btn-outline-warning tweet-btn comments-btn btn-sm" data-redirect-url="{% url 'tweet_detail' tweet.id %}" style="margin-left: 1rem">
+                                <i class="bi bi-chat"></i>
+                                <span>&nbsp;Comments</span>
+                            </button>
+                        </div>
+                        <span>
+                            {% if tweet.edited %}
+                                <i class="bi bi-pencil" title="Edited"></i>
+                            {% endif %}
+                            {{ tweet.creation_date }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h1>No tweets currently</h1>
+    {% endif %}
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $('.tweet-body').click(function (e){
+                const url = $(this).data('redirect-url')
+                window.location.href = url
+        })
+        $(document).ready(function() {
+            $('.like-form').submit(function (e){
+                e.preventDefault()
+                const url = $(this).attr('action')
+                const like_id = $(this).attr('id').substring(11)
+                const button = $(`.like-btn-${like_id}`)
+                const icon = $(`.like-icon-${like_id}`)
+                const status = $(button).val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (response) {
+                        if(status === 'Like'){
+                            $(button).prop('value', 'Liked')
+                        } else {
+                            $(button).prop('value', 'Like')
+                        }
+                        $(button).toggleClass('btn-danger btn-outline-danger')
+                        $(icon).toggleClass('bi-heart bi-heart-fill')
+                        $(`.like-count-${like_id}`).text(`\u00A0\u00A0${response}`)
+                    },
+                    error: function (response) {
+                        console.log('error', response)
+                    }
+                })
+            })
+            $('.bookmark-form').submit(function (e){
+                e.preventDefault()
+                const url = $(this).attr('action')
+                const like_id = $(this).attr('id').substring(15)
+                const submit = $(`#tweet-bookmark-submit-${like_id}`)
+                const status = $(submit).text()
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (response) {
+                        if(status.trim() === 'Save'){
+                            $(submit).text('Unsave')
+                        } else {
+                            $(submit).text('Save')
+                        }
+                    },
+                    error: function (response) {
+                        console.log('error', response)
+                    }
+                })
+            })
+            $('.comments-btn').click(function (e){
+                const url = $(this).data('redirect-url')
+                window.location.href = url
+            })
+
+        })
+    </script>
+{% endblock scripts %}

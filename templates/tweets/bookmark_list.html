@@ -1,0 +1,72 @@
+{% extends 'base_logged.html' %}
+{% block content %}
+    <div class="tweet-feed">
+        {% if bookmarks|length > 0 %}
+            {% for bookmark in bookmarks %}
+                <div class="tweet-wrapper">
+                    <div class="card text-white bg-dark" style="width: 30rem; text-align: center">
+                        <div class="card-header">
+                            <a href="{% url 'account_detail' bookmark.tweet.author.id %}" style="color: gold">
+                                <span style="float:left">{{ bookmark.tweet.author }}</span>
+                            </a>
+                            <div class="btn-group" style="float: right">
+                              <button class="tweet-edit-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-lg-end">
+                                  <form action="{% url 'tweet_bookmark' bookmark.tweet.id %}" method="post" class="bookmark-form" id="tweet-bookmark-{{bookmark.tweet.id}}">
+                                      {% csrf_token %}
+                                      <li><a class="dropdown-item" id="tweet-bookmark-submit-{{bookmark.tweet.id}}" href="javascript:$('#tweet-bookmark-{{bookmark.tweet.id}}').submit()">
+                                          Unsave
+                                      </a></li>
+                                  </form>
+                                  {% if bookmark.tweet.author == user %}
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{% url 'tweet_edit' bookmark.tweet.id %}">Edit</a></li>
+                                  <li><a class="dropdown-item" href="{% url 'tweet_delete' bookmark.tweet.id %}">Delete</a></li>
+                                  {% endif %}
+                              </ul>
+                            </div>
+                        </div>
+                        <div class="card-body tweet-body" data-redirect-url="{% url 'tweet_detail' bookmark.tweet.id %}">
+                            <div class="card-text">
+                                {{ bookmark.tweet.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h1>No bookmarks currently</h1>
+        {% endif %}
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        $('.tweet-body').click(function (e){
+                const url = $(this).data('redirect-url')
+                window.location.href = url
+        })
+        $('.bookmark-form').submit(function (e){
+                e.preventDefault()
+                const url = $(this).attr('action')
+                const like_id = $(this).attr('id').substring(15)
+                const submit = $(`#tweet-bookmark-submit-${like_id}`)
+                const status = $(submit).text()
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (response) {
+                        window.location.reload()
+                    },
+                    error: function (response) {
+                        console.log('error', response)
+                    }
+                })
+            })
+    </script>
+{% endblock scripts %}

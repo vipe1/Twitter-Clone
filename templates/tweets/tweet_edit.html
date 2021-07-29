@@ -1,0 +1,32 @@
+{% extends 'base_logged.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Edit tweet</h1>
+    <div class="tweet-create" style="width: 500px; display: grid">
+<!--        <form method="post">-->
+<!--            {% csrf_token %}-->
+<!--            {{ form.content }}-->
+<!--            {{ form.image }}<br>-->
+<!--            <input type="submit" class="btn btn-outline-warning btn-sm mt-2" value="Update tweet">-->
+<!--        </form>-->
+        </form>
+        <form action="" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="tweet_id" value="{{ tweet.pk }}">
+            <textarea class="mb-2" name="content" placeholder="Type your tweet here" maxlength="500" style="width: 100%">{{ tweet.content }}</textarea><br>
+
+            {% if tweet.image %}
+                <span>
+                    Currently attached image: <a href="{{ tweet.image.url }}" target="_blank">{{ tweet.image.name }}</a>
+                </span>
+                <div>
+                    <label><input type="checkbox" style="vertical-align:middle" name="remove_image"> Remove image?</label>
+                </div>
+            {% endif %}
+
+            <label>Image: <input name="image" type="file" accept="image/*"></label><br>
+            <input type="submit" class="btn btn-outline-warning btn-sm mt-4" value="Update tweet">
+        </form>
+    </div>
+{% endblock content %}

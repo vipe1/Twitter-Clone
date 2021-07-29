@@ -1,0 +1,11 @@
+{% extends 'base_logged.html' %}
+{% block content %}
+    <div class="tweet-create" style="width: 300px">
+        <form action="" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <textarea name="content" placeholder="Type your tweet here" maxlength="500"></textarea>
+            <input name="image" type="file" accept="image/*"><br>
+            <button type="submit" class="btn btn-success btn-sm mt-2">Tweet</button>
+        </form>
+    </div>
+{% endblock content %}

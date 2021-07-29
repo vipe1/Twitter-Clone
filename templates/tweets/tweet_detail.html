@@ -1,0 +1,140 @@
+{% extends 'base_logged.html' %}
+{% block content %}
+    <div class="tweet-wrapper" style="border: 0">
+        <div class="card text-white bg-dark">
+            <div class="card-header">
+                <a href="{% url 'account_detail' tweet.author.id %}" style="color: gold">
+                    <span style="float:left">{{ tweet.author }}</span>
+                </a>
+                <div class="btn-group" style="float: right">
+                  <button class="tweet-edit-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-lg-end">
+                      <form action="{% url 'tweet_bookmark' tweet.id %}" method="post" class="bookmark-form" id="tweet-bookmark-{{tweet.id}}">
+                          {% csrf_token %}
+                          <li><a class="dropdown-item" id="tweet-bookmark-submit-{{tweet.id}}" href="javascript:$('#tweet-bookmark-{{tweet.id}}').submit()">
+                              {% if tweet.id not in bookmarks %}
+                                Save
+                              {% else %}
+                                Unsave
+                              {% endif %}
+                          </a></li>
+                      </form>
+                      {% if tweet.author == user %}
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url 'tweet_edit' tweet.id %}">Edit</a></li>
+                      <li><a class="dropdown-item" href="{% url 'tweet_delete' tweet.id %}">Delete</a></li>
+                      {% endif %}
+                  </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-text">
+                    {{ tweet.content }}
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <form action="{% url 'tweet_like' tweet.id %}" method="post" class="like-form" id="{{tweet.id}}">
+                    {% csrf_token %}
+                    {% if liked %}
+                        <button class="btn btn-danger btn-sm like-btn">
+                        <i class="bi bi-heart-fill like-icon"></i>
+                        <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                        </button>
+                    {% else %}
+                        <button class="btn btn-outline-danger btn-sm like-btn">
+                        <i class="bi bi-heart like-icon"></i>
+                        <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                        </button>
+                    {% endif %}
+                </form>
+                <span>
+                    {% if tweet.edited %}
+                        <i class="bi bi-pencil" title="Edited"></i>
+                    {% endif %}
+                    {{ tweet.creation_date }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="comment-section">
+        <ul class="list-group">
+            <form method="post" action="{% url 'tweet_comment' tweet.id %}">
+                {% csrf_token %}
+                {{ comment_create_form.content }}
+            </form>
+        {% for comment in tweet.comments.all %}
+            <li class="list-group-item text-white bg-dark">
+                <span class="text-muted">{{ comment.author }}</span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ comment }}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('.like-form').submit(function (e){
+                e.preventDefault()
+                const url = $(this).attr('action')
+                const button = $('.like-btn')
+                const icon = $('.like-icon')
+                const status = $(button).val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (response) {
+                        if(status === 'Like'){
+                            $(button).prop('value', 'Liked')
+                        } else {
+                            $(button).prop('value', 'Like')
+                        }
+                        $(button).toggleClass('btn-danger btn-outline-danger')
+                        $(icon).toggleClass('bi-heart bi-heart-fill')
+                        $('.like-count').text(`\u00A0\u00A0${response}`)
+                    },
+                    error: function (response) {
+                        console.log('error', response)
+                    }
+                })
+            })
+            $('.bookmark-form').submit(function (e){
+                e.preventDefault()
+                const url = $(this).attr('action')
+                const like_id = $(this).attr('id').substring(15)
+                const submit = $(`#tweet-bookmark-submit-${like_id}`)
+                const status = $(submit).text()
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (response) {
+                        if(status.trim() === 'Save'){
+                            $(submit).text('Unsave')
+                        } else {
+                            $(submit).text('Save')
+                        }
+                    },
+                    error: function (response) {
+                        console.log('error', response)
+                    }
+                })
+            })
+        })
+        $('.comment-input').keypress(function (e) {
+                if(e.which == 10 || e.which == 13) {
+                    this.form.submit()
+                }
+            }
+        )
+    </script>
+{% endblock scripts %}
