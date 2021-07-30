@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from datetime import datetime
-from PIL import Image
 
 def get_upload_path(instance, filename):
     name = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -46,10 +45,10 @@ class Comment(models.Model):
     )
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
-    content = models.TextField()
+    content = models.TextField(max_length=100)
 
     def __str__(self):
-        return self.content[:50]
+        return self.content
 
 
 class Like(models.Model):

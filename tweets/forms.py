@@ -8,6 +8,7 @@ class TweetCreateForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={
                 'placeholder': 'Type your tweet here',
+                'maxlength': 500,
             }),
         }
 
@@ -19,5 +20,6 @@ class CommentCreateForm(forms.ModelForm):
             'content': forms.Textarea(attrs={
                 'class': 'comment-input',
                 'placeholder': 'Comment (Press Enter to submit)',
+                'maxlength': 100,
             })
         }

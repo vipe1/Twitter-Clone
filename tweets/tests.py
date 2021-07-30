@@ -110,8 +110,20 @@ class TweetsTests(TestCase):
             raise self.fail('''Author field shouldn't be accepted in this form''')
 
 
+    def test_tweet_with_too_long_content(self):
+        test_string = 'b' * 501
+        dummy_data = {
+            'author': self.user2,
+            'content': test_string
+        }
+        form = TweetCreateForm(data=dummy_data)
+        self.assertFalse(form.is_valid())
+
+
     def test_comment_create_form(self):
         dummy_data = {
+            'origin': self.tweet,
+            'author': self.user2,
             'content': 'dum dum comment text'
         }
         form = CommentCreateForm(data=dummy_data)
@@ -134,3 +146,14 @@ class TweetsTests(TestCase):
             pass
         else:
             raise self.fail('''Author field shouldn't be accepted in this form''')
+
+
+    def test_comment_with_too_long_content(self):
+        test_string = 'b' * 101
+        dummy_data = {
+            'origin': self.tweet,
+            'author': self.user2,
+            'content': test_string
+        }
+        form = CommentCreateForm(data=dummy_data)
+        self.assertFalse(form.is_valid())

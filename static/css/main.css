@@ -256,7 +256,7 @@ body {
     background-color: var(--other-blue-color);
     color: white;
     font-size: 15px;
-    height: 6rem;
+    height: 5rem;
     box-sizing: border-box;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -273,15 +273,23 @@ body {
 .account-details {
     text-align: center;
     margin-bottom: 10px;
+    padding: 5px;
     border: 1px solid var(--gold-color);
     border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.account-details h1 {
+.account-details h2 {
     font-weight: bold;
 }
 
-.account-details h3 {
+.account-details h4 {
     color: lightgrey;
     font-weight: lighter;
+}
+
+.comment {
+    word-wrap: break-word;
 }

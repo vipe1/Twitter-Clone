@@ -4,7 +4,6 @@ from django.shortcuts import redirect, Http404, HttpResponse, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Tweet, Comment, Like, Bookmark
 from .forms import TweetCreateForm, CommentCreateForm
-from PIL import Image
 
 # Create your views here.
 class TweetListView(LoginRequiredMixin, ListView):

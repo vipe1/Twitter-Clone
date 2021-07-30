@@ -1,8 +1,8 @@
 {% extends 'base_logged.html' %}
 {% block content %}
     <div class="account-details">
-        <h1>{{ account.username }}</h1>
-        <h3>@{{ account.display_name }}</h3>
+        <h2 title="Display name: {{ account.display_name }}">{{ account.display_name }}</h2>
+        <h4 title="Username: {{ account.username }}">@{{ account.username }}</h4>
     </div>
     {% for tweet in account.tweets.all %}
         <div class="tweet-wrapper">

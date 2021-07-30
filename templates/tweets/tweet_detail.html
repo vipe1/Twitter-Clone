@@ -58,14 +58,14 @@
             </div>
         </div>
     </div>
-    <div class="comment-section">
+    <div class="comment-section" style="margin-bottom: 10px">
         <ul class="list-group">
             <form method="post" action="{% url 'tweet_comment' tweet.id %}">
                 {% csrf_token %}
                 {{ comment_create_form.content }}
             </form>
         {% for comment in tweet.comments.all %}
-            <li class="list-group-item text-white bg-dark">
+            <li class="list-group-item text-white bg-dark comment">
                 <span class="text-muted">{{ comment.author }}</span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ comment }}
             </li>
         {% endfor %}
