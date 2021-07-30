@@ -269,3 +269,19 @@ body {
 .comment-section textarea:focus {
     outline: none;
 }
+
+.account-details {
+    text-align: center;
+    margin-bottom: 10px;
+    border: 1px solid var(--gold-color);
+    border-radius: 10px;
+}
+
+.account-details h1 {
+    font-weight: bold;
+}
+
+.account-details h3 {
+    color: lightgrey;
+    font-weight: lighter;
+}
