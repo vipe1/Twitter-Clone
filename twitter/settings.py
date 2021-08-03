@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os.path
 from pathlib import Path
 from os import system
-import environ
+import environs
 
-env = environ.Env()
-environ.Env.read_env()
+env = environs.Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,11 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [env('ALLOWED_HOST')]
+ALLOWED_HOSTS = [
+    env('ALLOWED_HOST'),
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -95,10 +99,10 @@ WSGI_APPLICATION = 'twitter.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': env('DATABASE_NAME'),
-    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': env('DATABASE_NAME'),
+    # },
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': env('DATABASE_NAME'),
@@ -106,7 +110,8 @@ DATABASES = {
     #     'PASSWORD': env('DATABASE_PASS'),
     #     'HOST': 'localhost',
     #     'PORT': '5432'
-    # }
+    # },
+    'default': env.dj_db_url('DATABASE_URL'),
 }
 
 # Password validation
