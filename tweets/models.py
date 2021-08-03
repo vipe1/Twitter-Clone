@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from datetime import datetime
 
+
 def get_upload_path(instance, filename):
     name = datetime.now().strftime('%Y%m%d%H%M%S')
     ext = filename[filename.rfind('.'):]
     path = f'tweets/author-{instance.author.pk}/{name}{ext}'
     return path
+
 
 # Create your models here.
 class Tweet(models.Model):
@@ -30,6 +32,23 @@ class Tweet(models.Model):
     def get_likes(self):
         count = Like.objects.filter(tweet__id=self.id).count()
         return count
+
+
+class Retweet(models.Model):
+    origin = models.ForeignKey(
+        Tweet,
+        on_delete=models.CASCADE,
+        related_name='retweets'
+    )
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='retweets'
+    )
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.author} retweeted {self.origin}'
 
 
 class Comment(models.Model):

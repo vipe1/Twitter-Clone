@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^_os9tzcpo=@9-a@k_pp+rqclq8vw5n6a6om%gr*hwr*c@p0^7'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.netlify.app']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     # 3rd party
@@ -59,6 +60,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -94,13 +96,17 @@ WSGI_APPLICATION = 'twitter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASS'),
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
+    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': env('DATABASE_NAME'),
+    #     'USER': env('DATABASE_USER'),
+    #     'PASSWORD': env('DATABASE_PASS'),
+    #     'HOST': 'localhost',
+    #     'PORT': '5432'
+    # }
 }
 
 # Password validation
@@ -147,6 +153,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR.joinpath('static')
 ]
+STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR.joinpath('media')
@@ -159,5 +167,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+USE_L10N = False
+DATETIME_FORMAT = "G:i d.m.Y"
 
 system('cls')

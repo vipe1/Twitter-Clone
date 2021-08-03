@@ -34,21 +34,39 @@
                     {{ tweet.content }}
                 </div>
             </div>
+            {% if tweet.image %}
+                <img src="{{ tweet.image.url }}">
+            {% endif %}
             <div class="card-footer text-muted">
-                <form action="{% url 'tweet_like' tweet.id %}" method="post" class="like-form" id="{{tweet.id}}">
-                    {% csrf_token %}
-                    {% if liked %}
-                        <button class="btn btn-danger btn-sm like-btn">
-                        <i class="bi bi-heart-fill like-icon"></i>
-                        <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                <div class="tweet-buttons">
+                    <form action="{% url 'tweet_like' tweet.id %}" method="post" class="like-form" id="{{tweet.id}}">
+                        {% csrf_token %}
+                        {% if liked %}
+                            <button class="btn btn-danger btn-sm like-btn tweet-btn">
+                            <i class="bi bi-heart-fill like-icon"></i>
+                            <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                            </button>
+                        {% else %}
+                            <button class="btn btn-outline-danger btn-sm like-btn tweet-btn">
+                            <i class="bi bi-heart like-icon"></i>
+                            <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
+                            </button>
+                        {% endif %}
+                    </form>
+                    <form action="{% url 'tweet_retweet' tweet.id %}" method="post">
+                        {% csrf_token %}
+                        <button
+                        {% if tweet.id in retweets %}
+                            class="btn btn-success tweet-btn btn-sm"
+                        {% else %}
+                            class="btn btn-outline-success tweet-btn btn-sm"
+                        {% endif %}
+                        >
+                            <i class="bi bi-bootstrap-reboot"></i>
+                            <span>&nbsp;Retweet</span>
                         </button>
-                    {% else %}
-                        <button class="btn btn-outline-danger btn-sm like-btn">
-                        <i class="bi bi-heart like-icon"></i>
-                        <span style="font-style: normal" class="like-count">&nbsp;&nbsp;{{ tweet.likes_count }}</span>
-                        </button>
-                    {% endif %}
-                </form>
+                    </form>
+                </div>
                 <span>
                     {% if tweet.edited %}
                         <i class="bi bi-pencil" title="Edited"></i>
@@ -60,13 +78,23 @@
     </div>
     <div class="comment-section" style="margin-bottom: 10px">
         <ul class="list-group">
-            <form method="post" action="{% url 'tweet_comment' tweet.id %}">
+            <form method="post" action="{% url 'tweet_comments' tweet.id %}">
                 {% csrf_token %}
                 {{ comment_create_form.content }}
             </form>
         {% for comment in tweet.comments.all %}
             <li class="list-group-item text-white bg-dark comment">
-                <span class="text-muted">{{ comment.author }}</span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ comment }}
+                <span>
+                    <span class="text-muted">{{ comment.author }}</span>&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ comment }}
+                    {% if comment.author == user %}
+                        <form method="post" action="{% url 'comment_delete' comment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm comment-delete-btn">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                </span>
             </li>
         {% endfor %}
         </ul>

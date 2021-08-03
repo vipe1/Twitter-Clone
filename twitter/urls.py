@@ -13,3 +13,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler403 = 'twitter.views.handler403'
+handler404 = 'twitter.views.handler404'

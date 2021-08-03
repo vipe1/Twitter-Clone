@@ -2,9 +2,12 @@
 {% block content %}
     <div class="tweet-feed">
         {% if bookmarks|length > 0 %}
+            <div class="tweet-wrapper tweet-card" style="width: 502px">
+                <h2>&nbsp;Your Bookmarks</h2>
+            </div>
             {% for bookmark in bookmarks %}
                 <div class="tweet-wrapper">
-                    <div class="card text-white bg-dark" style="width: 30rem; text-align: center">
+                    <div class="card text-white bg-dark tweet-card">
                         <div class="card-header">
                             <a href="{% url 'account_detail' bookmark.tweet.author.id %}" style="color: gold">
                                 <span style="float:left">{{ bookmark.tweet.author }}</span>
@@ -28,25 +31,26 @@
                               </ul>
                             </div>
                         </div>
-                        <div class="card-body tweet-body" data-redirect-url="{% url 'tweet_detail' bookmark.tweet.id %}">
+                        <div class="card-body tweet-body">
                             <div class="card-text">
                                 {{ bookmark.tweet.content }}
                             </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'tweet_detail' bookmark.tweet.id %}">
+                                Go to Tweet
+                            </a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <h1>No bookmarks currently</h1>
+            <h1>No Bookmarks currently</h1>
         {% endif %}
     </div>
 {% endblock content %}
 {% block scripts %}
     <script>
-        $('.tweet-body').click(function (e){
-                const url = $(this).data('redirect-url')
-                window.location.href = url
-        })
         $('.bookmark-form').submit(function (e){
                 e.preventDefault()
                 const url = $(this).attr('action')

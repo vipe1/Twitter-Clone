@@ -3,8 +3,8 @@ from .views import SignupView, AccountEditView, AccountDeleteView, AccountDetail
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
-    path('edit_account/', AccountEditView.as_view(), name='account_edit'),
-    path('delete_account/', AccountDeleteView.as_view(), name='account_delete'),
+    path('edit-account/', AccountEditView.as_view(), name='account_edit'),
+    path('delete-account/', AccountDeleteView.as_view(), name='account_delete'),
 
     path('account/<int:pk>/', AccountDetailView.as_view(), name='account_detail')
 ]

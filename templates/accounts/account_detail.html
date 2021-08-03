@@ -12,20 +12,17 @@
                         <span style="float:left">{{ tweet.author }}</span>
                     </a>
                 </div>
-                <div class="card-body tweet-body" data-redirect-url="{% url 'tweet_detail' tweet.id %}">
+                <div class="card-body tweet-body">
                     <div class="card-text">
                         {{ tweet.content }}
                     </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'tweet_detail' tweet.id %}">
+                        Go to Tweet
+                    </a>
                 </div>
             </div>
         </div>
     {% endfor %}
 {% endblock content %}
-{% block scripts %}
-    <script>
-        $('.tweet-body').click(function (e){
-                const url = $(this).data('redirect-url')
-                window.location.href = url
-        })
-    </script>
-{% endblock scripts %}
