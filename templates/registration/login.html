@@ -1,23 +1,91 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content_cols %}
-    <div class="container">
-        <h1 class="login-header">Login</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="login-form">
-                {{ form|crispy }}
+    <div class="loginPage">
+        <div class="snap-div" id="login">
+            <div class="container">
+                <h1 class="login-header">Login</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="login-form">
+                        {{ form|crispy }}
+                    </div>
+                    <input class="btn btn-outline-success btn-lg" style="margin-bottom: 10px" type="submit" value="Log In"><br>
+                    <div class="btn-group login-buttons" role="group" style="width: 40%">
+                        <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'signup' %}`">
+                            Sign up
+                        </button>
+                        <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'password_reset' %}`">
+                            Reset password
+                        </button>
+                    </div>
+                </form>
             </div>
-            <input class="btn btn-outline-success btn-lg" style="margin-bottom: 10px" type="submit" value="Log In"><br>
-            <div class="btn-group login-buttons" role="group" style="width: 40%">
-                <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'signup' %}`">
-                    Sign up
-                </button>
-                <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'password_reset' %}`">
-                    Reset password
-                </button>
+            <div class="scrollDown">
+                <p>Scroll down to see info about this project</p>
+                <i class="bi bi-chevron-double-down"></i>
             </div>
-        </form>
+        </div>
+        <div class="snap-div" id="info-tweets">
+            <div class="half-div">
+                <h1 class="snap-div-info">
+                    <b class="snap-div-info-title">Interact with others</b>
+                    <p>
+                        <ul>
+                            <li>Tweet</li>
+                            <li>Retweet</li>
+                            <li>Like</li>
+                        </ul>
+                    </p>
+                </h1>
+            </div>
+            <div class="half-div">
+                <img src="{% static 'img/info/info-tweets.png' %}">
+            </div>
+        </div>
+        <div class="snap-div" id="info-comments">
+            <div class="half-div">
+                <img src="{% static 'img/info/info-comments.png' %}">
+            </div>
+            <div class="half-div">
+                <h1 class="snap-div-info">
+                    <b class="snap-div-info-title">Share your thoughts in the comment section</b>
+                </h1>
+            </div>
+        </div>
+        <div class="snap-div" id="info-bookmarks">
+            <div class="half-div">
+                <h1 class="snap-div-info">
+                    <b class="snap-div-info-title">Save your favourite Tweets and go back to them at any time</b>
+                </h1>
+            </div>
+            <div class="half-div">
+                <img src="{% static 'img/info/info-bookmarks.png' %}">
+            </div>
+        </div>
+        <div class="snap-div" id="info-project">
+            <div class="full-div">
+                <h1 class="snap-div-info">
+                    <b class="snap-div-info-title">Made from scratch using:</b>
+                    <p>
+                        <ul>
+                            <li>Django</li>
+                            <li>Django Crispy Forms</li>
+                            <li>Bootstrap 5</li>
+                            <li>Django REST framework</li>
+                            <li>A lot of time</li>
+                        </ul>
+                    </p>
+                </h1>
+            </div>
+        </div>
     </div>
 {% endblock content_cols %}
+{% block scripts %}
+    <script src="{% static 'js/blinkingIndicator.js' %}"></script>
+    <script>
+        $('#info-project').css('background-image', "url({% static 'img/info/info-code-bg-2.png' %})")
+    </script>
+{% endblock scripts %}

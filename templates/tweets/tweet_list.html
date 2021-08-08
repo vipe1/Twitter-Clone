@@ -1,5 +1,7 @@
 {% extends 'base_logged.html' %}
 {% load tweet_tags %}
+{% load static %}
+
 {% block content %}
     {% if tweet_list|length > 0 %}
         {% for tweet in tweet_list %}
@@ -24,7 +26,7 @@
                                 </div>
                             </div>
                             {% if retweet.origin.image %}
-                                <img src="{{ retweet.origin.image.url }}" style="max-height: 150px">
+                                <img class="tweet-image" src="{{ retweet.origin.image.url }}" style="max-height: 150px">
                             {% endif %}
                             <div class="card-footer text-muted">
                                 <a href="{% url 'tweet_detail' retweet.origin.id %}">
@@ -34,7 +36,7 @@
                         </div>
                     {% endwith %}
                 {% else %}
-                    <div class="card text-white bg-dark" style="width: 500px">
+                    <div class="card text-white bg-dark tweet-card">
                         <div class="card-header">
                             <a href="{% url 'account_detail' tweet.author.id %}" style="color: gold">
                                 <span style="float:left">{{ tweet.author }}</span>
@@ -68,7 +70,7 @@
                             </div>
                         </div>
                         {% if tweet.image %}
-                            <img src="{{ tweet.image.url }}">
+                            <img class="tweet-image" src="{{ tweet.image.url }}">
                         {% endif %}
                         <div class="card-footer text-muted">
                             <div class="tweet-buttons">
@@ -123,6 +125,7 @@
 {% endblock content %}
 
 {% block scripts %}
+    <script src="{% static 'js/modalImage.js' %}"></script>
     <script>
         $('.tweet-body').click(function (e){
                 const url = $(this).data('redirect-url')
@@ -187,7 +190,6 @@
                 const url = $(this).data('redirect-url')
                 window.location.href = url
             })
-
         })
     </script>
 {% endblock scripts %}

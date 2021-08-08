@@ -4,6 +4,12 @@
     --gold-color: #ffad1f;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--dark-blue-color);
     color: white;
@@ -96,7 +102,7 @@ a {
 }
 
 .col-mid {
-    width: 502px;
+    width: 500px;
 }
 
 .col-right {
@@ -156,19 +162,8 @@ a {
     margin-bottom: 1rem;
 }
 
-.tweet-wrapper img {
-    max-height: 300px;
-    width: 100%;
-    object-fit: contain;
-    padding: 5px;
-}
-
-.tweet-wrapper img:hover {
-    filter: brightness(60%);
-}
-
 .tweet-card {
-    width: 500px;
+    width: 498px;
 }
 
 .tweet-edit-dropdown {
@@ -217,9 +212,9 @@ a {
     background-color: var(--other-blue-color);
 
     max-width: 50%;
-    max-height: 90%;
+    height: max-content;
 
-    position: absolute;
+    position: relative;
 	top:0;
 	bottom: 0;
 	left: 0;
@@ -231,8 +226,7 @@ a {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    padding: 10px;
-    padding-bottom: 50px;
+    padding: 50px 50px 100px 50px;
 }
 
 .login-header {
@@ -300,7 +294,9 @@ a {
 }
 
 .comment {
+    width: 500px;
     word-wrap: break-word;
+    margin-bottom: 5px;
 }
 
 .tweet-retweet-message {
@@ -322,4 +318,136 @@ a {
 
 .home-icon {
     color: #1DA1F2;
+}
+
+/* Modal image style */
+
+.tweet-wrapper img {
+    max-height: 300px;
+    width: 100%;
+    padding: 5px;
+    object-fit: contain;
+    transition: all 0.15s ease-out;
+    cursor: pointer;
+}
+
+.tweet-wrapper img:hover {
+    filter: brightness(60%);
+}
+
+.modal {
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    transition: 0.25s ease-out;
+}
+
+.modal.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modalImage {
+    position: absolute;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.25);
+    transition: all 0.25s ease-out;
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.modalImage.open {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modalClose {
+    font-size: 100px;
+    opacity: 0.8;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: rgb(200, 0, 0);
+}
+
+.modalClose:hover {
+    cursor: pointer;
+    color: rgb(120, 0, 0);
+}
+
+.loginPage {
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+}
+
+.snap-div {
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+
+    scroll-snap-align: start;
+}
+
+.snap-div-info-title {
+    font-size: 4rem;
+}
+
+.snap-div-info {
+    font-size: 2rem;
+    color: whitesmoke;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#login {
+    position: relative;
+}
+
+#info-tweets {
+    background: var(--other-blue-color);
+}
+
+#info-bookmarks {
+    background: var(--other-blue-color);
+}
+
+.scrollDown {
+    position: absolute;
+    bottom: 10px;
+
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+
+    opacity: 0;
+}
+
+.half-div {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-div {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.half-div img {
+    height: 80vh;
 }

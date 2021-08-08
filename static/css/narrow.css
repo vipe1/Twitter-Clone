@@ -1,0 +1,12 @@
+@media only screen and (max-width: 1300px) {
+
+/*.col-content {*/
+/*  flex-direction: column;*/
+/*}*/
+
+.container {
+  max-width: 90%;
+}
+
+}
+

@@ -28,12 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     env('ALLOWED_HOST'),
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    '192.168.8.123',
 ]
 
 
@@ -99,10 +100,10 @@ WSGI_APPLICATION = 'twitter.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': env('DATABASE_NAME'),
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': env('DATABASE_NAME'),
+    },
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': env('DATABASE_NAME'),
@@ -111,7 +112,6 @@ DATABASES = {
     #     'HOST': 'localhost',
     #     'PORT': '5432'
     # },
-    'default': env.dj_db_url('DATABASE_URL'),
 }
 
 # Password validation
@@ -168,12 +168,21 @@ MEDIA_ROOT = BASE_DIR.joinpath('media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 USE_L10N = False
 DATETIME_FORMAT = "G:i d.m.Y"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'  # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = env('FROM_EMAIL')
 
 system('cls')

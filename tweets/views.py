@@ -71,14 +71,6 @@ class TweetCommentView(LoginRequiredMixin, View):
         comment.save()
         return redirect(reverse_lazy('tweet_detail', args=[pk]))
 
-    def delete(self, request, pk):
-        comment_pk = request.DELETE['comment_id']
-        comment = Comment.objects.get(pk=comment_pk)
-        if comment.author == request.user:
-            comment.delete()
-            return redirect(reverse_lazy('tweet_details', args=[pk]))
-        return HttpResponse(status=403)
-
 
 class TweetLikeView(LoginRequiredMixin, View):
     def post(self, request, pk):
