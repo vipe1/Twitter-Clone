@@ -104,67 +104,16 @@
 
 {% block scripts %}
     <script src="{% static 'js/modalImage.js' %}"></script>
+    <script src="{% static 'js/bookmark.js' %}"></script>
+    <script src="{% static 'js/likeDetail.js' %}"></script>
     <script>
         $(document).ready(function() {
-            $('.like-form').submit(function (e){
-                e.preventDefault()
-                const url = $(this).attr('action')
-                const button = $('.like-btn')
-                const icon = $('.like-icon')
-                const status = $(button).val()
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
-                    },
-                    success: function (response) {
-                        if(status === 'Like'){
-                            $(button).prop('value', 'Liked')
-                        } else {
-                            $(button).prop('value', 'Like')
-                        }
-                        $(button).toggleClass('btn-danger btn-outline-danger')
-                        $(icon).toggleClass('bi-heart bi-heart-fill')
-                        $('.like-count').text(`\u00A0\u00A0${response}`)
-                    },
-                    error: function (response) {
-                        console.log('error', response)
+            $('.comment-input').keypress(function (e) {
+                    if(e.which == 10 || e.which == 13) {
+                        this.form.submit()
                     }
-                })
-            })
-            $('.bookmark-form').submit(function (e){
-                e.preventDefault()
-                const url = $(this).attr('action')
-                const like_id = $(this).attr('id').substring(15)
-                const submit = $(`#tweet-bookmark-submit-${like_id}`)
-                const status = $(submit).text()
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        'csrfmiddlewaretoken':  $('input[name=csrfmiddlewaretoken]').val()
-                    },
-                    success: function (response) {
-                        if(status.trim() === 'Save'){
-                            $(submit).text('Unsave')
-                        } else {
-                            $(submit).text('Save')
-                        }
-                    },
-                    error: function (response) {
-                        console.log('error', response)
-                    }
-                })
-            })
-        })
-        $('.comment-input').keypress(function (e) {
-                if(e.which == 10 || e.which == 13) {
-                    this.form.submit()
                 }
-            }
-        )
+            )
+        })
     </script>
 {% endblock scripts %}

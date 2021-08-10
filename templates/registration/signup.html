@@ -2,22 +2,24 @@
 {% load crispy_forms_tags %}
 
 {% block content_cols %}
-    <div class="container">
-        <h1 class="login-header" style="max-height: 90%">Sign Up</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="login-form">
-                {{ form|crispy }}
-            </div>
-            <input class="btn btn-outline-success btn-lg" style="margin-bottom: 10px" type="submit" value="Sign Up"><br>
-            <div class="btn-group login-buttons" role="group" style="width: 40%">
-                <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'login' %}`">
-                    Log in
-                </button>
-                <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'password_reset' %}`">
-                    Reset password
-                </button>
-            </div>
-        </form>
+    <div class="center">
+        <div class="container">
+            <h1 class="login-header" style="max-height: 90%">Sign Up</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="login-form">
+                    {{ form|crispy }}
+                </div>
+                <input class="btn btn-outline-success btn-lg" style="margin-bottom: 10px" type="submit" value="Sign Up"><br>
+                <div class="btn-group login-buttons" role="group" style="width: 40%">
+                    <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'login' %}`">
+                        Log in
+                    </button>
+                    <button class="btn btn-outline-warning" style="width: 50%" onclick="document.location=`{% url 'password_reset' %}`">
+                        Reset password
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock content_cols %}

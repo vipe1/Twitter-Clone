@@ -16,6 +16,9 @@
                             {{ tweet.content }}
                         </div>
                     </div>
+                    {% if tweet.image %}
+                        <img class="tweet-image" src="{{ tweet.image.url }}" style="max-height: 150px">
+                    {% endif %}
                     <div class="card-footer text-muted">
                         <span>
                             {% if tweet.edited %}
