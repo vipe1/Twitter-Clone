@@ -126,6 +126,7 @@ class TweetEditView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
             edited = True
         if tweet.content != data['content']:
             edited = True
+            tweet.content = data['content']
         if edited:
             tweet.edited = True
         tweet.save()
